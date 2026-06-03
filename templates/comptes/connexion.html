@@ -1,37 +1,764 @@
 {% extends 'base.html' %}
-{% block titre %}Connexion - MentorLink{% endblock %}
+{% load static %}
+{% block titre %}IFRI_MentorLink - Accueil{% endblock %}
+
+{% block style_supplementaire %}
+<style>
+    #bg-blobs {
+        display: none;
+    }
+
+    body {
+        background: #fff8f4 !important;
+        color: #1d1715;
+    }
+
+    .container-fluid.py-4 {
+        padding: 0 !important;
+    }
+
+    .landing-shell {
+        min-height: 100vh;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 76% 8%, rgba(255, 204, 187, 0.58), transparent 31%),
+            linear-gradient(180deg, #fffaf7 0%, #fff6f1 48%, #f5eee9 100%);
+        color: #1d1715;
+    }
+
+    .landing-wrap {
+        width: min(1130px, calc(100% - 48px));
+        margin: 0 auto;
+    }
+
+    .landing-nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid rgba(126, 62, 35, 0.12);
+        background: rgba(255, 250, 247, 0.88);
+        backdrop-filter: blur(16px);
+    }
+
+    .landing-nav-inner {
+        min-height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+    }
+
+    .landing-brand {
+        color: #803018;
+        font-size: 18px;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .landing-links {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 42px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .landing-links a {
+        color: #241b18;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .landing-links a.active {
+        color: #a73612;
+        border-bottom: 2px solid #a73612;
+        padding-bottom: 7px;
+    }
+
+    .landing-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .link-login {
+        border: 0;
+        background: transparent;
+        color: #1d1715;
+        font-weight: 700;
+    }
+
+    .btn-burnt {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 46px;
+        padding: 0 24px;
+        border: 1px solid #912d0a;
+        border-radius: 8px;
+        background: #b73307;
+        color: white !important;
+        font-weight: 700;
+        text-decoration: none;
+        box-shadow: 0 14px 30px rgba(176, 54, 10, 0.22);
+    }
+
+    .btn-soft {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 24px;
+        border: 1px solid #8dbcb6;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.72);
+        color: #31716b !important;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .hero {
+        min-height: 760px;
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+        align-items: center;
+        gap: 72px;
+        padding: 86px 0 132px;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 24px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: #ffe99f;
+        color: #7b4a00;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+    }
+
+    .hero h1 {
+        max-width: 580px;
+        margin: 0;
+        color: #111;
+        font-size: clamp(38px, 5vw, 62px);
+        font-weight: 900;
+        line-height: 1.12;
+        letter-spacing: 0;
+    }
+
+    .hero h1 span {
+        color: #b73307;
+    }
+
+    .hero p {
+        max-width: 560px;
+        margin: 28px 0 34px;
+        color: #5e5551;
+        font-size: 17px;
+    }
+
+    .hero-ctas {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .hero-art {
+        position: relative;
+        min-height: 420px;
+        display: grid;
+        place-items: center;
+    }
+
+    .art-card {
+        position: relative;
+        width: min(520px, 100%);
+        aspect-ratio: 1.56;
+        overflow: hidden;
+        border-radius: 2px;
+        background:
+            linear-gradient(180deg, rgba(142, 63, 30, 0.16), rgba(89, 34, 16, 0.18)),
+            url("{% static 'images/mentor-bg.svg' %}") center/cover no-repeat;
+        box-shadow: 0 34px 58px rgba(102, 56, 42, 0.25);
+    }
+
+    .network {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+    }
+
+    .node {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #df6544;
+        box-shadow: 0 0 0 7px rgba(223, 101, 68, 0.18);
+    }
+
+    .node.n1 { left: 22%; top: 26%; }
+    .node.n2 { right: 26%; top: 22%; background: #f2bd73; }
+    .node.n3 { left: 35%; bottom: 25%; background: #d94e35; }
+    .node.n4 { right: 20%; bottom: 29%; background: #f3d28b; }
+
+    .network-line {
+        position: absolute;
+        width: 260px;
+        height: 160px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        transform: rotate(-14deg);
+    }
+
+    .center-badge {
+        position: relative;
+        z-index: 2;
+        width: 106px;
+        height: 106px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.86);
+        color: #b73307;
+        font-size: 44px;
+        box-shadow: 0 18px 34px rgba(56, 29, 19, 0.22);
+    }
+
+    .section-title {
+        max-width: 650px;
+        margin: 0 auto 62px;
+        text-align: center;
+    }
+
+    .section-title h2 {
+        margin: 0 0 14px;
+        color: #151111;
+        font-size: clamp(28px, 3vw, 38px);
+        font-weight: 850;
+    }
+
+    .section-title p {
+        margin: 0;
+        color: #706763;
+    }
+
+    .features {
+        padding: 22px 0 118px;
+    }
+
+    .feature-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(280px, 0.95fr);
+        gap: 34px;
+        align-items: stretch;
+    }
+
+    .feature-card,
+    .study-card,
+    .cta-panel {
+        border: 1px solid rgba(113, 75, 58, 0.1);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: 0 20px 50px rgba(126, 72, 46, 0.12);
+    }
+
+    .feature-card {
+        min-height: 320px;
+        display: grid;
+        grid-template-columns: 1fr 1.05fr;
+        gap: 34px;
+        padding: 50px;
+    }
+
+    .feature-icon,
+    .study-icon,
+    .match-icon {
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        margin-bottom: 28px;
+    }
+
+    .feature-icon {
+        background: #74efe2;
+        color: #08766e;
+    }
+
+    .feature-card h3,
+    .study-card h3,
+    .match-card h3 {
+        margin: 0 0 14px;
+        color: #211a17;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .feature-card p,
+    .study-card p {
+        color: #655b57;
+    }
+
+    .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 28px;
+    }
+
+    .chip {
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .chip.yellow { background: #ffe6a7; color: #765200; }
+    .chip.cyan { background: #aaf7ed; color: #046c67; }
+    .chip.peach { background: #ffe1d9; color: #91452f; }
+
+    .profile-preview {
+        min-height: 190px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(122, 90, 74, 0.2);
+        border-radius: 8px;
+        background: #f7f2ef;
+    }
+
+    .avatar-orbit {
+        position: relative;
+        width: 116px;
+        height: 116px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: white;
+        color: #d7a391;
+        font-size: 48px;
+        box-shadow: 0 16px 28px rgba(90, 60, 45, 0.16);
+    }
+
+    .avatar-orbit::after {
+        content: "\f00c";
+        position: absolute;
+        right: -2px;
+        top: 4px;
+        width: 26px;
+        height: 26px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #008d87;
+        color: white;
+        font-family: "Font Awesome 6 Free";
+        font-size: 12px;
+        font-weight: 900;
+    }
+
+    .match-card {
+        padding: 50px;
+        border-radius: 8px;
+        background: #b73307;
+        color: white;
+        box-shadow: 0 24px 42px rgba(179, 51, 7, 0.26);
+    }
+
+    .match-icon {
+        background: rgba(255, 255, 255, 0.17);
+        color: #ffd8c6;
+    }
+
+    .match-card h3,
+    .match-card p,
+    .match-card span {
+        color: white;
+    }
+
+    .match-card p {
+        margin-bottom: 48px;
+    }
+
+    .match-stat {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-top: 32px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        font-weight: 800;
+    }
+
+    .study-card {
+        margin-top: 34px;
+        min-height: 300px;
+        display: grid;
+        grid-template-columns: 0.8fr 1.25fr;
+        gap: 34px;
+        padding: 46px 50px;
+    }
+
+    .study-icon {
+        background: #dcae08;
+        color: #543b00;
+    }
+
+    .study-link {
+        display: inline-flex;
+        margin-top: 18px;
+        color: #9b3b18;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .boards-preview {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        align-items: center;
+    }
+
+    .board {
+        min-height: 190px;
+        border: 10px solid #e5e0dd;
+        border-radius: 8px;
+        background: #faf8f7;
+        padding: 26px;
+    }
+
+    .line {
+        height: 13px;
+        margin-bottom: 14px;
+        border-radius: 999px;
+        background: #e8e1dd;
+    }
+
+    .line.short {
+        width: 64%;
+    }
+
+    .dots {
+        display: flex;
+        gap: 8px;
+        margin-top: 66px;
+    }
+
+    .dots i {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+    }
+
+    .dots i:nth-child(1) { background: #76ecdf; }
+    .dots i:nth-child(2) { background: #ffd47e; }
+    .dots i:nth-child(3) { background: #f2a0a5; }
+
+    .cta-section {
+        padding: 0 0 104px;
+    }
+
+    .cta-panel {
+        padding: 82px 28px;
+        text-align: center;
+        background:
+            linear-gradient(90deg, rgba(232, 250, 255, 0.62), rgba(255, 255, 255, 0.92), rgba(255, 246, 236, 0.72));
+    }
+
+    .cta-panel h2 {
+        margin: 0 0 18px;
+        color: #171211;
+        font-weight: 850;
+    }
+
+    .cta-panel p {
+        margin: 0 0 34px;
+        color: #706763;
+    }
+
+    .landing-footer {
+        padding: 64px 0;
+        background: #e9e2de;
+    }
+
+    .footer-inner {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 34px;
+    }
+
+    .footer-brand {
+        color: #803018;
+        font-weight: 850;
+        margin-bottom: 10px;
+    }
+
+    .footer-inner p,
+    .footer-inner a {
+        color: #5f5753;
+        font-size: 14px;
+    }
+
+    .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 34px;
+    }
+
+    .footer-links a {
+        text-decoration: none;
+    }
+
+    .modal-content {
+        border: 0;
+        border-radius: 8px;
+        box-shadow: 0 24px 70px rgba(38, 21, 15, 0.28);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #eee0d8;
+    }
+
+    .login-modal-title {
+        color: #803018;
+        font-weight: 850;
+    }
+
+    .form-label,
+    .modal-body p,
+    .modal-body a {
+        color: #403733;
+    }
+
+    .modal-body a {
+        color: #a73612;
+        font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+        .landing-wrap {
+            width: min(100% - 28px, 720px);
+        }
+
+        .landing-nav-inner {
+            flex-wrap: wrap;
+            padding: 14px 0;
+        }
+
+        .landing-links {
+            order: 3;
+            width: 100%;
+            justify-content: flex-start;
+            gap: 24px;
+            overflow-x: auto;
+        }
+
+        .hero,
+        .feature-layout,
+        .feature-card,
+        .study-card {
+            grid-template-columns: 1fr;
+        }
+
+        .hero {
+            min-height: auto;
+            gap: 42px;
+            padding: 56px 0 86px;
+        }
+
+        .feature-card,
+        .study-card,
+        .match-card {
+            padding: 30px;
+        }
+
+        .boards-preview {
+            grid-template-columns: 1fr;
+        }
+
+        .footer-inner {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
 
 {% block contenu %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-5">
-        <div class="card p-4">
-            <div class="text-center mb-4">
-                <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
-                <h3>MentorLink IFRI</h3>
-                <p class="text-muted">Connectez-vous à votre compte</p>
+<div class="landing-shell">
+    <nav class="landing-nav">
+        <div class="landing-wrap landing-nav-inner">
+            <a class="landing-brand" href="#">IFRI_MentorLink</a>
+            <ul class="landing-links">
+                <li><a class="active" href="#">Accueil</a></li>
+                <li><a href="#explorer">Explorer</a></li>
+                <li><a href="#apropos">A propos</a></li>
+            </ul>
+            <div class="landing-actions">
+                <button class="link-login" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                <a class="btn-burnt" href="{% url 'inscription' %}">Sign Up</a>
             </div>
-            <form method="post">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label class="form-label">Email ou téléphone</label>
-                    <input type="text" name="identifiant" class="form-control" placeholder="Email ou téléphone" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Mot de passe</label>
-                    <input type="password" name="mot_de_passe" class="form-control" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100 py-2">
-                    <i class="fas fa-sign-in-alt me-2"></i>Se connecter
-                </button>
-            </form>
-            <div class="text-end mt-2">
-                <a href="{% url 'demander_reinitialisation' %}">Mot de passe oublié ?</a>
-            </div>
-            <hr>
-            <p class="text-center mb-0">
-                Pas encore de compte ?
-                <a href="{% url 'inscription' %}">S'inscrire</a>
+        </div>
+    </nav>
+
+    <section class="landing-wrap hero">
+        <div>
+            <span class="eyebrow">Nouveau : Programme IFRI 2026</span>
+            <h1>L'entraide académique <span>simplifiée</span> pour les étudiants</h1>
+            <p>
+                Connectez-vous avec des mentors passionnés, partagez vos connaissances et atteignez vos
+                objectifs académiques dans un environnement inspirant et collaboratif.
             </p>
+            <div class="hero-ctas">
+                <button class="btn-burnt" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">
+                    Découvrir un Mentor <i class="fas fa-arrow-right"></i>
+                </button>
+                <a class="btn-soft" href="{% url 'inscription' %}">Devenir Mentor</a>
+            </div>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+            <div class="art-card">
+                <div class="network">
+                    <div class="network-line"></div>
+                    <span class="node n1"></span>
+                    <span class="node n2"></span>
+                    <span class="node n3"></span>
+                    <span class="node n4"></span>
+                    <div class="center-badge"><i class="fas fa-graduation-cap"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="explorer" class="landing-wrap features">
+        <div class="section-title">
+            <h2>Tout ce dont vous avez besoin pour réussir</h2>
+            <p>Une plateforme pensée par des étudiants, pour des étudiants. Simplicité, efficacité et convivialité au coeur de votre parcours.</p>
+        </div>
+
+        <div class="feature-layout">
+            <article class="feature-card">
+                <div>
+                    <div class="feature-icon"><i class="fas fa-user-circle"></i></div>
+                    <h3>Profils Personnalisés</h3>
+                    <p>
+                        Mettez en avant vos compétences, vos objectifs et vos besoins académiques.
+                        Un profil riche pour des connexions de qualité.
+                    </p>
+                    <div class="chips">
+                        <span class="chip yellow">Informatique</span>
+                        <span class="chip cyan">Finance</span>
+                        <span class="chip peach">Marketing</span>
+                    </div>
+                </div>
+                <div class="profile-preview" aria-hidden="true">
+                    <div class="avatar-orbit"><i class="far fa-user"></i></div>
+                </div>
+            </article>
+
+            <article class="match-card">
+                <div class="match-icon"><i class="fas fa-link"></i></div>
+                <h3>Matching Intelligent</h3>
+                <p>
+                    Notre algorithme vous propose les meilleurs mentors en fonction de vos cours
+                    et de vos disponibilités.
+                </p>
+                <div class="match-stat">
+                    <i class="fas fa-bolt"></i>
+                    <span>98% de satisfaction</span>
+                </div>
+            </article>
+        </div>
+
+        <article id="apropos" class="study-card">
+            <div>
+                <div class="study-icon"><i class="fas fa-users"></i></div>
+                <h3>Espaces d'Étude</h3>
+                <p>
+                    Des salons virtuels collaboratifs avec partage d'écran et messagerie pour
+                    travailler ensemble comme si vous y étiez.
+                </p>
+                <a class="study-link" href="{% url 'inscription' %}">En savoir plus <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+            <div class="boards-preview" aria-hidden="true">
+                <div class="board">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line short"></div>
+                    <div class="dots"><i></i><i></i><i></i></div>
+                </div>
+                <div class="board">
+                    <div class="line short"></div>
+                    <div class="line"></div>
+                    <div class="line short"></div>
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <section class="landing-wrap cta-section">
+        <div class="cta-panel">
+            <h2>Prêt à transformer votre parcours ?</h2>
+            <p>Rejoignez une communauté d'étudiants IFRI motivés à apprendre, partager et progresser ensemble.</p>
+            <a class="btn-burnt" href="{% url 'inscription' %}">Commencer l'Aventure</a>
+        </div>
+    </section>
+
+    <footer class="landing-footer">
+        <div class="landing-wrap footer-inner">
+            <div>
+                <div class="footer-brand">IFRI_MentorLink</div>
+                <p>© 2026 IFRI MentorLink. Intelligent mentorship for the next generation.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Academic Guidelines</a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title fs-4 login-modal-title" id="loginModalLabel">Connexion</h2>
+                    <p class="mb-0 small">Accédez à votre espace MentorLink.</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Email ou téléphone</label>
+                        <input type="text" name="identifiant" class="form-control" placeholder="Email ou téléphone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mot de passe</label>
+                        <input type="password" name="mot_de_passe" class="form-control" placeholder="Mot de passe" required>
+                    </div>
+                    <button type="submit" class="btn-burnt w-100">
+                        <i class="fas fa-sign-in-alt"></i> Se connecter
+                    </button>
+                </form>
+                <div class="d-flex flex-wrap justify-content-between gap-2 mt-3">
+                    <a href="{% url 'demander_reinitialisation' %}">Mot de passe oublié ?</a>
+                    <a href="{% url 'inscription' %}">Créer un compte</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
