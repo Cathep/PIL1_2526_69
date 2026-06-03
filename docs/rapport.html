@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rapport de projet - IFRI_MentorLink</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #5a6475;
+      --line: #d9dee8;
+      --soft: #f4f7fb;
+      --brand: #0b6bcb;
+      --accent: #179b70;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: var(--ink);
+      background: white;
+    }
+
+    header {
+      padding: 48px 24px 36px;
+      color: white;
+      background: linear-gradient(135deg, #073b72, #0b6bcb 58%, #179b70);
+    }
+
+    main {
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 32px 24px 56px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.2;
+    }
+
+    h1 {
+      max-width: 1020px;
+      margin: 0 auto 12px;
+      font-size: 40px;
+    }
+
+    header p {
+      max-width: 1020px;
+      margin: 6px auto;
+      color: #e9f3ff;
+      font-size: 17px;
+    }
+
+    h2 {
+      margin-top: 34px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line);
+      color: #073b72;
+    }
+
+    h3 {
+      margin-top: 22px;
+      color: #0b4f91;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 15px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--soft);
+    }
+
+    code,
+    pre {
+      font-family: "Ubuntu Mono", Consolas, monospace;
+      background: #eef3f8;
+      border-radius: 4px;
+    }
+
+    code {
+      padding: 2px 5px;
+    }
+
+    pre {
+      overflow-x: auto;
+      padding: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .note {
+      padding: 14px 16px;
+      border-left: 4px solid var(--accent);
+      background: #eefaf5;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+
+    .item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: white;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    @media print {
+      header {
+        background: white;
+        color: var(--ink);
+        border-bottom: 2px solid var(--line);
+      }
+
+      header p {
+        color: var(--ink);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Rapport de projet - IFRI_MentorLink</h1>
+    <p>Projet intégrateur 2025-2026 - Groupe 69</p>
+    <p>Université d'Abomey-Calavi - Institut de Formation et de Recherche en Informatique</p>
+    <p>Licence IA / IM / GL / SE&amp;IoT / SI</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Présentation du projet</h2>
+      <p>
+        IFRI_MentorLink est une application web destinée à mettre en relation les étudiants de l'IFRI
+        qui souhaitent bénéficier ou offrir du mentorat académique et professionnel. La solution permet
+        aux utilisateurs de créer un profil détaillé, de publier des offres ou demandes de mentorat, de
+        recevoir des suggestions de matching et de communiquer via une messagerie intégrée.
+      </p>
+      <p>
+        Le projet répond à un besoin concret : faciliter l'entraide entre étudiants en tenant compte des
+        compétences maîtrisées, des lacunes, des filières, des niveaux d'étude et des disponibilités.
+      </p>
+    </section>
+
+    <section>
+      <h2>2. Membres du groupe</h2>
+      <p class="note">
+        A compléter avec les noms, prénoms, filières et contributions réelles de chaque membre avant le dépôt final.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Nom et prénom</th>
+            <th>Filière</th>
+            <th>Rôle principal</th>
+            <th>Contribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Membre 1</td>
+            <td>A compléter</td>
+            <td>Coordination / Backend</td>
+            <td>Gestion des comptes, authentification, intégration Django.</td>
+          </tr>
+          <tr>
+            <td>Membre 2</td>
+            <td>A compléter</td>
+            <td>Base de données</td>
+            <td>Modélisation SQL, migrations, schéma final.</td>
+          </tr>
+          <tr>
+            <td>Membre 3</td>
+            <td>A compléter</td>
+            <td>Frontend</td>
+            <td>Pages HTML, formulaires, styles et navigation.</td>
+          </tr>
+          <tr>
+            <td>Membre 4</td>
+            <td>A compléter</td>
+            <td>Matching</td>
+            <td>Algorithme de compatibilité et affichage des résultats.</td>
+          </tr>
+          <tr>
+            <td>Membre 5</td>
+            <td>A compléter</td>
+            <td>Messagerie / Tests</td>
+            <td>Conversations, messages, validation fonctionnelle.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>3. Organisation du travail</h2>
+      <p>
+        Le groupe a travaillé selon une répartition modulaire des tâches. Chaque module correspond à une
+        partie fonctionnelle du cahier des charges : comptes, mentorat, matching, messagerie, base de
+        données et documentation. Git a été utilisé pour suivre l'évolution du code source et conserver
+        l'historique des modifications.
+      </p>
+      <div class="grid">
+        <div class="item">
+          <h3>Planification</h3>
+          <p>Identification des exigences, découpage en modules et priorisation des fonctionnalités essentielles.</p>
+        </div>
+        <div class="item">
+          <h3>Développement</h3>
+          <p>Implémentation progressive des applications Django, des vues, des modèles et des templates.</p>
+        </div>
+        <div class="item">
+          <h3>Validation</h3>
+          <p>Vérification des parcours utilisateur : inscription, profil, publication, matching et messagerie.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Conception technique</h2>
+      <h3>Architecture générale</h3>
+      <p>
+        L'application adopte une architecture client-serveur. Le navigateur envoie des requêtes HTTP au
+        serveur Django, qui traite la logique métier, interagit avec la base de données MySQL et renvoie
+        des pages HTML. La messagerie utilise Django Channels pour gérer les échanges en temps réel.
+      </p>
+
+      <h3>Structure du projet</h3>
+      <pre><code>mentorlink/
+├── comptes/        # Utilisateurs, profils, compétences et disponibilités
+├── mentorat/       # Offres, demandes et suggestions de matching
+├── messagerie/     # Conversations et messages
+├── mentorlink/     # Configuration principale Django
+├── templates/      # Interfaces HTML
+├── static/         # Fichiers CSS et images
+├── sql/            # Schémas SQL
+└── docs/           # Rapport HTML</code></pre>
+
+      <h3>Modules développés</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Comptes</td>
+            <td>Inscription, connexion, réinitialisation du mot de passe, profil, compétences, lacunes et disponibilités.</td>
+          </tr>
+          <tr>
+            <td>Mentorat</td>
+            <td>Création, consultation, recherche et suppression d'offres ou demandes de mentorat.</td>
+          </tr>
+          <tr>
+            <td>Matching</td>
+            <td>Calcul d'un score selon les compétences, les horaires, la filière et le niveau d'étude.</td>
+          </tr>
+          <tr>
+            <td>Messagerie</td>
+            <td>Gestion des conversations, envoi de messages et conservation de l'historique.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>5. Base de données</h2>
+      <p>
+        La base de données relationnelle contient les entités principales suivantes :
+      </p>
+      <ul>
+        <li><code>users</code> : informations de compte et profil utilisateur.</li>
+        <li><code>fields_of_study</code> : filières des étudiants.</li>
+        <li><code>skills</code> : compétences ou matières.</li>
+        <li><code>user_skills</code> : points forts et lacunes des utilisateurs.</li>
+        <li><code>user_availabilities</code> : disponibilités horaires habituelles.</li>
+        <li><code>mentoring_requests</code> : offres et demandes de mentorat.</li>
+        <li><code>match_suggestions</code> : résultats de matching.</li>
+        <li><code>conversations</code> et <code>messages</code> : messagerie intégrée.</li>
+      </ul>
+      <p>
+        Le schéma SQL final est disponible dans le fichier <code>sql/schema_final.sql</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>6. Algorithme de matching</h2>
+      <p>
+        L'algorithme compare l'utilisateur connecté avec les autres utilisateurs actifs. Il évalue :
+      </p>
+      <ul>
+        <li>la correspondance entre les lacunes d'un mentoré et les compétences d'un mentor ;</li>
+        <li>le chevauchement des disponibilités horaires ;</li>
+        <li>la proximité de filière ;</li>
+        <li>la proximité de niveau d'étude.</li>
+      </ul>
+      <p>
+        Le score global est calculé avec une pondération : 45 % compétences, 30 % horaires,
+        15 % filière et 10 % niveau. Les résultats sont ensuite triés par score décroissant.
+      </p>
+    </section>
+
+    <section>
+      <h2>7. Sécurité et confidentialité</h2>
+      <ul>
+        <li>Les mots de passe sont hashés par le système d'authentification Django.</li>
+        <li>Les emails et numéros de téléphone sont uniques.</li>
+        <li>Les pages principales sont protégées par authentification.</li>
+        <li>Les conversations ne sont accessibles qu'aux utilisateurs participants.</li>
+        <li>Les données personnelles affichées sont limitées aux informations utiles au mentorat.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. Instructions de déploiement</h2>
+      <h3>Prérequis</h3>
+      <ul>
+        <li>Python 3.12 ou version compatible.</li>
+        <li>MySQL ou MariaDB.</li>
+        <li>Git.</li>
+      </ul>
+
+      <h3>Installation</h3>
+      <pre><code>git clone https://github.com/Cathep/PIL1_2526_69.git
+cd PIL1_2526_69
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt</code></pre>
+
+      <h3>Configuration de la base de données</h3>
+      <pre><code>CREATE DATABASE mentorlink CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'mentorlink_user'@'localhost' IDENTIFIED BY 'Mentorlink2025';
+GRANT ALL PRIVILEGES ON mentorlink.* TO 'mentorlink_user'@'localhost';
+FLUSH PRIVILEGES;</code></pre>
+
+      <h3>Démarrage</h3>
+      <pre><code>python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver</code></pre>
+
+      <p>
+        L'application est ensuite disponible à l'adresse <code>http://127.0.0.1:8000/</code>.
+      </p>
+    </section>
+
+    <section>
+      <h2>9. Manuel d'utilisation</h2>
+      <h3>Créer un compte</h3>
+      <p>
+        Accéder à la page d'inscription, renseigner le nom, le prénom, l'email, le téléphone et le mot de
+        passe. Après inscription, compléter le profil avec la filière, le niveau, les compétences, les
+        lacunes et les disponibilités.
+      </p>
+
+      <h3>Publier une offre ou une demande</h3>
+      <p>
+        Depuis le tableau de bord, accéder à la page des publications puis créer une offre ou une demande
+        en choisissant la compétence concernée, le format de séance et les horaires souhaités.
+      </p>
+
+      <h3>Lancer le matching</h3>
+      <p>
+        Utiliser l'action de matching pour générer automatiquement des suggestions de mentors ou mentorés.
+        Les résultats affichent le score global, les compétences communes et les disponibilités compatibles.
+      </p>
+
+      <h3>Discuter avec un utilisateur</h3>
+      <p>
+        Après acceptation d'un matching ou depuis un profil utilisateur, ouvrir une conversation et envoyer
+        des messages. L'historique reste disponible dans la liste des conversations.
+      </p>
+    </section>
+
+    <section>
+      <h2>10. Limites et perspectives</h2>
+      <ul>
+        <li>La couche de temps réel utilise une configuration simple adaptée au développement.</li>
+        <li>Le système de notification peut être amélioré avec un compteur global de messages non lus.</li>
+        <li>Le matching pourrait intégrer des critères supplémentaires, comme les centres d'intérêt académiques.</li>
+        <li>Le déploiement en production nécessiterait une configuration plus sécurisée des variables sensibles.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>11. Conclusion</h2>
+      <p>
+        IFRI_MentorLink propose une solution fonctionnelle de mise en relation entre mentors et mentorés.
+        Le projet met en pratique les notions de développement web, programmation Python, bases de données
+        relationnelles, SQL et collaboration avec Git. Les modules réalisés répondent aux exigences
+        principales du cahier des charges et constituent une base extensible pour de futures améliorations.
+      </p>
+      <p class="muted">
+        Dépôt GitHub : https://github.com/Cathep/PIL1_2526_69
+      </p>
+    </section>
+  </main>
+</body>
+</html>
