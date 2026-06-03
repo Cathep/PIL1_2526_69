@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block titre %}Publications - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4><i class="fas fa-bullhorn text-primary me-2"></i>Offres et demandes de mentorat</h4>
+    <a href="{% url 'creer_publication' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nouvelle publication
+    </a>
+</div>
+
+<div class="card p-3 mb-4">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Type</label>
+            <select name="type" class="form-select">
+                <option value="">Tous</option>
+                <option value="offre" {% if type_filtre == 'offre' %}selected{% endif %}>Offres</option>
+                <option value="demande" {% if type_filtre == 'demande' %}selected{% endif %}>Demandes</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Compétence</label>
+            <select name="competence" class="form-select">
+                <option value="">Toutes</option>
+                {% for comp in competences %}
+                <option value="{{ comp.id }}" {% if competence_filtre == comp.id|stringformat:'s' %}selected{% endif %}>
+                    {{ comp.nom }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Jour</label>
+            <select name="jour" class="form-select">
+                <option value="">Tous</option>
+                {% for val, label in jours %}
+                <option value="{{ val }}" {% if jour_filtre == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-primary w-100">
+                <i class="fas fa-filter me-1"></i>Filtrer
+            </button>
+        </div>
+    </form>
+</div>
+
+{% if publications %}
+<div class="row g-3">
+    {% for pub in publications %}
+    <div class="col-md-6">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <span class="badge {% if pub.type_publication == 'offre' %}bg-success{% else %}bg-warning text-dark{% endif %} fs-6">
+                    {% if pub.type_publication == 'offre' %}
+                        <i class="fas fa-hand-holding me-1"></i>Offre
+                    {% else %}
+                        <i class="fas fa-hand-paper me-1"></i>Demande
+                    {% endif %}
+                </span>
+                <small class="text-muted">{{ pub.date_creation|date:"d/m/Y" }}</small>
+            </div>
+            <h6 class="mb-1">{{ pub.competence.nom }}</h6>
+            <small class="text-muted d-block mb-2">
+                <i class="fas fa-map-marker-alt me-1"></i>{{ pub.get_format_seance_display }}
+            </small>
+            {% if pub.jour %}
+            <small class="text-muted d-block mb-2">
+                <i class="fas fa-clock me-1"></i>{{ pub.get_jour_display }}
+                {% if pub.heure_debut and pub.heure_fin %}
+                    · {{ pub.heure_debut|time:'H:i' }} - {{ pub.heure_fin|time:'H:i' }}
+                {% endif %}
+            </small>
+            {% endif %}
+            {% if pub.description %}
+            <p class="text-muted small mb-3">{{ pub.description|truncatechars:100 }}</p>
+            {% endif %}
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" style="width:32px;height:32px;font-size:0.8rem;">
+                        {{ pub.auteur.prenom.0 }}{{ pub.auteur.nom.0 }}
+                    </div>
+                    <small><strong>{{ pub.auteur.prenom }} {{ pub.auteur.nom }}</strong><br>
+                    <span class="text-muted">{{ pub.auteur.filiere }}</span></small>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'voir_profil' pub.auteur.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <a href="{% url 'demarrer_conversation' pub.auteur.id %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-comment"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+    <h5 class="text-muted">Aucune publication trouvée</h5>
+    <a href="{% url 'creer_publication' %}" class="btn btn-primary mt-2">
+        <i class="fas fa-plus me-2"></i>Créer la première publication
+    </a>
+</div>
+{% endif %}
+{% endblock %}

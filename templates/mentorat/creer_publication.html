@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block titre %}Nouvelle publication - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card p-4">
+            <h4 class="mb-4"><i class="fas fa-plus-circle text-primary me-2"></i>Nouvelle publication</h4>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Type de publication</label>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <input type="radio" class="btn-check" name="type_publication" id="offre" value="offre" required>
+                            <label class="btn btn-outline-success w-100 py-3" for="offre">
+                                <i class="fas fa-hand-holding fa-2x d-block mb-2"></i>
+                                <strong>Offre</strong><br>
+                                <small>Je peux aider quelqu'un</small>
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <input type="radio" class="btn-check" name="type_publication" id="demande" value="demande">
+                            <label class="btn btn-outline-warning w-100 py-3" for="demande">
+                                <i class="fas fa-hand-paper fa-2x d-block mb-2"></i>
+                                <strong>Demande</strong><br>
+                                <small>J'ai besoin d'aide</small>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Compétence / Matière</label>
+                    <select name="competence" class="form-select" required>
+                        <option value="">-- Choisir une compétence --</option>
+                        {% regroup competences by categorie as comp_par_categorie %}
+                        {% for groupe in comp_par_categorie %}
+                        <optgroup label="{{ groupe.grouper }}">
+                            {% for comp in groupe.list %}
+                            <option value="{{ comp.id }}">{{ comp.nom }}</option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Format des séances</label>
+                    <select name="format_seance" class="form-select" required>
+                        <option value="presentiel">Présentiel</option>
+                        <option value="en_ligne">En ligne</option>
+                        <option value="les_deux" selected>Les deux</option>
+                    </select>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Jour</label>
+                        <select name="jour" class="form-select">
+                            <option value="">-- Choisir --</option>
+                            {% for val, label in jours %}
+                            <option value="{{ val }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Heure de début</label>
+                        <input type="time" name="heure_debut" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Heure de fin</label>
+                        <input type="time" name="heure_fin" class="form-control">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Description <span class="text-muted">(facultatif)</span></label>
+                    <textarea name="description" class="form-control" rows="3"
+                        placeholder="Décrivez ce que vous pouvez apporter ou ce dont vous avez besoin..."></textarea>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-fill py-2">
+                        <i class="fas fa-paper-plane me-2"></i>Publier
+                    </button>
+                    <a href="{% url 'liste_publications' %}" class="btn btn-outline-secondary flex-fill py-2">
+                        Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

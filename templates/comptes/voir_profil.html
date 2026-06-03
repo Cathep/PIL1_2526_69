@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block titre %}Profil - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width:60px;height:60px;font-size:1.5rem;">
+                    {% if utilisateur.photo_profil %}
+                        <img src="{{ utilisateur.photo_profil.url }}" class="rounded-circle" width="60" height="60" alt="Photo profil">
+                    {% else %}
+                        {{ utilisateur.prenom.0 }}{{ utilisateur.nom.0 }}
+                    {% endif %}
+                </div>
+                <div>
+                    <h3 class="mb-0">{{ utilisateur.prenom }} {{ utilisateur.nom }}</h3>
+                    <p class="text-muted mb-1">{{ utilisateur.filiere }} — {{ utilisateur.get_niveau_display }}</p>
+                    <small class="text-muted">{{ utilisateur.get_role_display }}</small>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5>Bio</h5>
+                <p class="text-muted">{{ utilisateur.bio|default:'Aucune description fournie.' }}</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Points forts</h5>
+                    {% if forces %}
+                        <ul class="list-group list-group-flush">
+                            {% for item in forces %}
+                                <li class="list-group-item">{{ item.competence.nom }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Aucune compétence renseignée.</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h5>Lacunes</h5>
+                    {% if lacunes %}
+                        <ul class="list-group list-group-flush">
+                            {% for item in lacunes %}
+                                <li class="list-group-item">{{ item.competence.nom }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Aucune lacune renseignée.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5>Disponibilités</h5>
+                {% if disponibilites %}
+                    <ul class="list-group list-group-flush">
+                        {% for dispo in disponibilites %}
+                        <li class="list-group-item">
+                            {{ dispo.get_jour_display }} · {{ dispo.heure_debut|time:'H:i' }} - {{ dispo.heure_fin|time:'H:i' }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">Aucune disponibilité renseignée.</p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'demarrer_conversation' utilisateur.id %}" class="btn btn-primary">Envoyer un message</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

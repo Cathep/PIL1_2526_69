@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block titre %}Publication - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h4 class="mb-1">{{ publication.get_type_publication_display }}</h4>
+                    <small class="text-muted">{{ publication.competence.nom }} · {{ publication.get_format_seance_display }}</small>
+                </div>
+                <span class="badge {% if publication.type_publication == 'offre' %}bg-success{% else %}bg-warning text-dark{% endif %}">{{ publication.get_type_publication_display }}</span>
+            </div>
+
+            <div class="mb-4">
+                <p class="text-muted">{{ publication.description|default:'Pas de description fournie.' }}</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Auteur :</strong> {{ publication.auteur.prenom }} {{ publication.auteur.nom }}</li>
+                    <li class="list-group-item"><strong>Filière :</strong> {{ publication.auteur.filiere }}</li>
+                    <li class="list-group-item"><strong>Niveau :</strong> {{ publication.auteur.get_niveau_display }}</li>
+                    <li class="list-group-item"><strong>Créée le :</strong> {{ publication.date_creation|date:'d/m/Y H:i' }}</li>
+                </ul>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a href="{% url 'demarrer_conversation' publication.auteur.id %}" class="btn btn-primary">Contacter l'auteur</a>
+                <a href="{% url 'liste_publications' %}" class="btn btn-outline-secondary">Retour aux publications</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

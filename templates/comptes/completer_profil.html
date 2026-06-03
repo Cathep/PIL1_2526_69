@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block titre %}Compléter mon profil - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h4 class="mb-1"><i class="fas fa-user-edit text-primary me-2"></i>Compléter votre profil</h4>
+            <p class="text-muted mb-4">Ces informations permettront de vous mettre en relation avec les bons mentors/mentorés</p>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h6 class="text-primary mb-3">Informations académiques</h6>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Filière</label>
+                        <select name="filiere" class="form-select">
+                            <option value="">-- Choisir --</option>
+                            {% for filiere in filieres %}
+                            <option value="{{ filiere.id }}">{{ filiere.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Niveau</label>
+                        <select name="niveau" class="form-select">
+                            <option value="">-- Choisir --</option>
+                            {% for val, label in niveaux %}
+                            <option value="{{ val }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Je veux être</label>
+                        <select name="role" class="form-select">
+                            {% for val, label in roles %}
+                            <option value="{{ val }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Bio courte</label>
+                    <textarea name="bio" class="form-control" rows="2" placeholder="Parlez brièvement de vous..."></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Photo de profil (facultative)</label>
+                    <input type="file" name="photo_profil" class="form-control" accept="image/*">
+                </div>
+
+                <h6 class="text-primary mb-3">Vos compétences</h6>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-success"><i class="fas fa-check-circle me-1"></i>Points forts</label>
+                        <div style="max-height:200px; overflow-y:auto; border:1px solid #dee2e6; border-radius:8px; padding:10px;">
+                            {% if competences %}
+                                {% for comp in competences %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="forces" value="{{ comp.id }}" id="force_{{ comp.id }}">
+                                    <label class="form-check-label" for="force_{{ comp.id }}">{{ comp.nom }}</label>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-muted">Aucune compétence n'est disponible pour le moment.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-danger"><i class="fas fa-times-circle me-1"></i>Lacunes</label>
+                        <div style="max-height:200px; overflow-y:auto; border:1px solid #dee2e6; border-radius:8px; padding:10px;">
+                            {% if competences %}
+                                {% for comp in competences %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="lacunes" value="{{ comp.id }}" id="lacune_{{ comp.id }}">
+                                    <label class="form-check-label" for="lacune_{{ comp.id }}">{{ comp.nom }}</label>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-muted">Aucune compétence n'est disponible pour le moment.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <h6 class="text-primary mb-3">Disponibilités</h6>
+                <div id="dispos">
+                    <div class="row mb-2 dispo-ligne">
+                        <div class="col-md-4">
+                            <select name="jours" class="form-select">
+                                <option value="">-- Jour --</option>
+                                {% for val, label in jours %}
+                                <option value="{{ val }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="time" name="heure_debut" class="form-control" placeholder="Début">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="time" name="heure_fin" class="form-control" placeholder="Fin">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-secondary btn-sm mb-4" onclick="ajouterDispo()">
+                    <i class="fas fa-plus me-1"></i>Ajouter une disponibilité
+                </button>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary py-2">
+                        <i class="fas fa-save me-2"></i>Enregistrer mon profil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_supplementaire %}
+<script>
+function ajouterDispo() {
+    const modele = document.querySelector('.dispo-ligne').cloneNode(true);
+    modele.querySelectorAll('select, input').forEach(el => el.value = '');
+    document.getElementById('dispos').appendChild(modele);
+}
+</script>
+{% endblock %}

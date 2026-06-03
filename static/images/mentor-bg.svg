@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d47a1" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#1976d2" stop-opacity="0.55"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#grad)"/>
+  <circle cx="200" cy="150" r="140" fill="#e3f2fd" opacity="0.16"/>
+  <circle cx="980" cy="120" r="120" fill="#bbdefb" opacity="0.14"/>
+  <circle cx="260" cy="620" r="170" fill="#fff8e1" opacity="0.12"/>
+  <circle cx="920" cy="680" r="140" fill="#90caf9" opacity="0.1"/>
+  <circle cx="750" cy="360" r="240" fill="url(#glow)" />
+
+  <g opacity="0.35" transform="translate(140 110)">
+    <rect x="0" y="0" width="360" height="220" rx="30" fill="#ffffff"/>
+    <path d="M40 60h280" stroke="#0d47a1" stroke-width="12" stroke-linecap="round"/>
+    <path d="M40 108h220" stroke="#0d47a1" stroke-width="12" stroke-linecap="round"/>
+    <path d="M40 156h180" stroke="#0d47a1" stroke-width="12" stroke-linecap="round"/>
+    <rect x="60" y="230" width="240" height="14" rx="7" fill="#0d47a1"/>
+  </g>
+
+  <g opacity="0.28" transform="translate(700 130)">
+    <rect x="0" y="0" width="320" height="180" rx="24" fill="#ffffff"/>
+    <path d="M40 60h240" stroke="#1976d2" stroke-width="10" stroke-linecap="round"/>
+    <path d="M40 104h180" stroke="#1976d2" stroke-width="10" stroke-linecap="round"/>
+    <path d="M40 148h120" stroke="#1976d2" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="280" cy="40" r="18" fill="#ffd54f"/>
+    <path d="M140 190c-15 20-20 40-20 60h80c0-20-5-40-20-60" fill="none" stroke="#1976d2" stroke-width="10"/>
+  </g>
+
+  <g opacity="0.3" transform="translate(160 430)">
+    <path d="M120 10 L270 10 L330 90 L270 150 L120 150 L60 90 Z" fill="#ffffff"/>
+    <path d="M120 10 L270 10 L330 90 L270 150 L120 150 L60 90 Z" fill="none" stroke="#0d47a1" stroke-width="12"/>
+    <path d="M175 70c0 18 12 28 25 28s25-10 25-28" fill="none" stroke="#0d47a1" stroke-width="10"/>
+    <path d="M165 70h50" stroke="#0d47a1" stroke-width="10" stroke-linecap="round"/>
+  </g>
+
+  <g opacity="0.3" transform="translate(690 450)">
+    <path d="M0 60h160v110H0z" fill="#ffffff"/>
+    <path d="M18 60v-16a20 20 0 0 1 20-20h84a20 20 0 0 1 20 20v16" fill="none" stroke="#0d47a1" stroke-width="12"/>
+    <path d="M80 170v-40" stroke="#0d47a1" stroke-width="14" stroke-linecap="round"/>
+    <path d="M64 126h32" stroke="#0d47a1" stroke-width="14" stroke-linecap="round"/>
+  </g>
+</svg>

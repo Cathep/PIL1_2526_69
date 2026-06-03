@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block titre %}Modifier mon profil - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h4 class="mb-3">Modifier mon profil</h4>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Nom</label>
+                        <input type="text" name="nom" class="form-control" value="{{ utilisateur.nom }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Prénom</label>
+                        <input type="text" name="prenom" class="form-control" value="{{ utilisateur.prenom }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Téléphone</label>
+                        <input type="text" name="telephone" class="form-control" value="{{ utilisateur.telephone }}" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Bio</label>
+                    <textarea name="bio" class="form-control" rows="3">{{ utilisateur.bio }}</textarea>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">Filière</label>
+                        <select name="filiere" class="form-select">
+                            <option value="">-- Choisir --</option>
+                            {% for filiere in filieres %}
+                            <option value="{{ filiere.id }}" {% if utilisateur.filiere_id == filiere.id %}selected{% endif %}>{{ filiere.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Niveau</label>
+                        <select name="niveau" class="form-select">
+                            <option value="">-- Choisir --</option>
+                            {% for val, label in niveaux %}
+                            <option value="{{ val }}" {% if utilisateur.niveau == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Je veux être</label>
+                        <select name="role" class="form-select">
+                            {% for val, label in roles %}
+                            <option value="{{ val }}" {% if utilisateur.role == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Photo de profil</label>
+                    <input type="file" name="photo_profil" class="form-control" accept="image/*">
+                    {% if utilisateur.photo_profil %}
+                    <div class="mt-3">
+                        <img src="{{ utilisateur.photo_profil.url }}" class="rounded" width="120" alt="Photo profil">
+                    </div>
+                    {% endif %}
+                </div>
+
+                <h5>Compétences</h5>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-success">Points forts</label>
+                        <div class="border rounded p-3" style="max-height:240px; overflow:auto;">
+                            {% if competences %}
+                                {% for comp in competences %}
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input" type="checkbox" name="forces" value="{{ comp.id }}" id="force_{{ comp.id }}" {% if comp.id in forces_ids %}checked{% endif %}>
+                                    <label class="form-check-label" for="force_{{ comp.id }}">{{ comp.nom }}</label>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-muted">Aucune compétence n'est disponible pour le moment.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-danger">Lacunes</label>
+                        <div class="border rounded p-3" style="max-height:240px; overflow:auto;">
+                            {% if competences %}
+                                {% for comp in competences %}
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input" type="checkbox" name="lacunes" value="{{ comp.id }}" id="lacune_{{ comp.id }}" {% if comp.id in lacunes_ids %}checked{% endif %}>
+                                    <label class="form-check-label" for="lacune_{{ comp.id }}">{{ comp.nom }}</label>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-muted">Aucune compétence n'est disponible pour le moment.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <h5>Disponibilités</h5>
+                <div id="dispos">
+                    {% for dispo in disponibilites %}
+                    <div class="row g-2 mb-2 dispo-ligne">
+                        <div class="col-md-4">
+                            <select name="jours" class="form-select">
+                                <option value="">-- Jour --</option>
+                                {% for val, label in jours %}
+                                <option value="{{ val }}" {% if dispo.jour == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="time" name="heure_debut" class="form-control" value="{{ dispo.heure_debut|time:'H:i' }}">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="time" name="heure_fin" class="form-control" value="{{ dispo.heure_fin|time:'H:i' }}">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center">
+                            <button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="supprimerDispo(this)">Supprimer</button>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="row g-2 mb-2 dispo-ligne">
+                        <div class="col-md-4">
+                            <select name="jours" class="form-select">
+                                <option value="">-- Jour --</option>
+                                {% for val, label in jours %}
+                                <option value="{{ val }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="time" name="heure_debut" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="time" name="heure_fin" class="form-control">
+                        </div>
+                        <div class="col-md-2 d-flex align-items-center">
+                            <button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="supprimerDispo(this)">Supprimer</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button type="button" class="btn btn-outline-secondary btn-sm mb-4" onclick="ajouterDispo()">
+                    <i class="fas fa-plus me-1"></i>Ajouter une disponibilité
+                </button>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary py-2">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_supplementaire %}
+<script>
+function ajouterDispo() {
+    const template = document.querySelector('.dispo-ligne').cloneNode(true);
+    template.querySelectorAll('select, input').forEach(el => el.value = '');
+    document.getElementById('dispos').appendChild(template);
+}
+
+function supprimerDispo(button) {
+    const ligne = button.closest('.dispo-ligne');
+    if (document.querySelectorAll('.dispo-ligne').length > 1) {
+        ligne.remove();
+    }
+}
+</script>
+{% endblock %}

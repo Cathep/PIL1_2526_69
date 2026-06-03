@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block titre %}Mes conversations - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h4 class="mb-1">Mes conversations</h4>
+                    <p class="text-muted">Accédez rapidement à vos échanges avec vos mentors et mentorés.</p>
+                </div>
+                <a href="{% url 'tableau_de_bord' %}" class="btn btn-outline-secondary">Retour au tableau de bord</a>
+            </div>
+
+            {% if conversations %}
+            <div class="list-group">
+                {% for item in conversations %}
+                <a href="{% url 'detail_conversation' item.conversation.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">{{ item.autre_utilisateur.prenom }} {{ item.autre_utilisateur.nom }}</h6>
+                        <small class="text-muted">{{ item.autre_utilisateur.filiere }} — {{ item.autre_utilisateur.get_niveau_display }}</small>
+                        {% if item.dernier_message %}
+                        <p class="mb-0 text-truncate">{{ item.dernier_message.contenu }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="text-end">
+                        {% if item.non_lus > 0 %}
+                            <span class="badge bg-danger rounded-pill">{{ item.non_lus }}</span>
+                        {% endif %}
+                        <small class="text-muted d-block">{{ item.dernier_message.date_envoi|date:'d/m H:i' }}</small>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5 text-muted">
+                <i class="fas fa-comments fa-3x mb-3"></i>
+                <p>Aucune conversation pour le moment.</p>
+                <a href="{% url 'liste_publications' %}" class="btn btn-primary">Voir les publications</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

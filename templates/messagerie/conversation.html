@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block titre %}Conversation - MentorLink{% endblock %}
+
+{% block style_supplementaire %}
+<style>
+    .zone-messages { height: 450px; overflow-y: auto; background: #f8f9fa; border-radius: 12px; padding: 15px; }
+    .message-moi { text-align: right; margin-bottom: 12px; }
+    .message-autre { text-align: left; margin-bottom: 12px; }
+    .bulle { display: inline-block; padding: 10px 15px; border-radius: 18px; max-width: 70%; word-wrap: break-word; }
+    .bulle-moi { background: #0d6efd; color: white; border-bottom-right-radius: 4px; }
+    .bulle-autre { background: white; color: #333; border-bottom-left-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .heure { font-size: 0.75rem; color: #aaa; margin-top: 3px; }
+</style>
+{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-white d-flex align-items-center py-3">
+                <a href="{% url 'liste_conversations' %}" class="btn btn-sm btn-outline-secondary me-3">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">
+                    {{ autre_utilisateur.prenom.0 }}{{ autre_utilisateur.nom.0 }}
+                </div>
+                <div>
+                    <strong>{{ autre_utilisateur.prenom }} {{ autre_utilisateur.nom }}</strong>
+                    <small class="d-block text-muted">{{ autre_utilisateur.filiere }} — {{ autre_utilisateur.get_niveau_display }}</small>
+                </div>
+                <a href="{% url 'voir_profil' autre_utilisateur.id %}" class="btn btn-sm btn-outline-primary ms-auto">
+                    <i class="fas fa-user me-1"></i>Profil
+                </a>
+            </div>
+
+            <div class="card-body p-3">
+                <div class="zone-messages" id="zoneMessages">
+                    {% for msg in messages %}
+                    <div class="{% if msg.expediteur == user %}message-moi{% else %}message-autre{% endif %}" data-id="{{ msg.id }}">
+                        <div class="bulle {% if msg.expediteur == user %}bulle-moi{% else %}bulle-autre{% endif %}">
+                            {{ msg.contenu }}
+                        </div>
+                        <div class="heure">{{ msg.date_envoi|date:"H:i" }}</div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-muted py-5" id="msgVide">
+                        <i class="fas fa-comment-dots fa-3x mb-3"></i>
+                        <p>Commencez la conversation !</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card-footer bg-white">
+                <div class="d-flex gap-2">
+                    <input type="text" id="champMessage" class="form-control" placeholder="Écrire un message...">
+                    <button onclick="envoyerMessage()" class="btn btn-primary px-4">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script_supplementaire %}
+<script>
+const convId = {{ conversation.id }};
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const socketUrl = `${protocol}://${window.location.host}/ws/conversation/${convId}/`;
+const champMessage = document.getElementById('champMessage');
+const zoneMessages = document.getElementById('zoneMessages');
+let socket;
+
+function scrollerEnBas() {
+    zoneMessages.scrollTop = zoneMessages.scrollHeight;
+}
+
+function ajouterMessage(contenu, heure, estMoi) {
+    const vide = document.getElementById('msgVide');
+    if (vide) vide.remove();
+
+    const div = document.createElement('div');
+    div.className = estMoi ? 'message-moi' : 'message-autre';
+    div.innerHTML = `
+        <div class="bulle ${estMoi ? 'bulle-moi' : 'bulle-autre'}">${contenu}</div>
+        <div class="heure">${heure}</div>
+    `;
+    zoneMessages.appendChild(div);
+    scrollerEnBas();
+}
+
+function connecterWebSocket() {
+    socket = new WebSocket(socketUrl);
+
+    socket.onopen = function() {
+        console.log('WebSocket connecté');
+    };
+
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        ajouterMessage(data.message, data.date_envoi, data.expediteur_id == {{ user.id }});
+    };
+
+    socket.onclose = function() {
+        console.log('WebSocket déconnecté, reconnexion dans 2 secondes...');
+        setTimeout(connecterWebSocket, 2000);
+    };
+}
+
+function envoyerMessage() {
+    const contenu = champMessage.value.trim();
+    if (!contenu || socket.readyState !== WebSocket.OPEN) return;
+
+    socket.send(JSON.stringify({ content: contenu }));
+    champMessage.value = '';
+}
+
+champMessage.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        envoyerMessage();
+    }
+});
+
+connecterWebSocket();
+scrollerEnBas();
+</script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block titre %}Tableau de bord - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="row mb-4">
+    <div class="col">
+        <h4>Bonjour, {{ user.prenom }} 👋</h4>
+        <p class="text-muted">{{ user.filiere }} — {{ user.get_niveau_display }}</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'lancer_matching' %}" class="btn btn-primary">
+            <i class="fas fa-magic me-2"></i>Lancer le matching
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card p-3">
+            <h6 class="mb-3"><i class="fas fa-handshake text-primary me-2"></i>Mes suggestions de matching</h6>
+            {% if matchings %}
+                {% for match in matchings %}
+                <div class="d-flex align-items-center justify-content-between mb-3 p-2 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">
+                            {{ match.mentor.prenom.0 }}{{ match.mentor.nom.0 }}
+                        </div>
+                        <div>
+                            {% if match.mentor == user %}
+                                <strong>{{ match.mentore.prenom }} {{ match.mentore.nom }}</strong>
+                                <small class="d-block text-muted">Vous êtes mentor</small>
+                            {% else %}
+                                <strong>{{ match.mentor.prenom }} {{ match.mentor.nom }}</strong>
+                                <small class="d-block text-muted">Vous êtes mentoré</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-success score-badge">{{ match.score_global }}%</span>
+                        {% if match.statut == 'en_attente' %}
+                        <div class="mt-1">
+                            <a href="{% url 'accepter_matching' match.id %}" class="btn btn-sm btn-success">Accepter</a>
+                            <a href="{% url 'refuser_matching' match.id %}" class="btn btn-sm btn-outline-danger">Refuser</a>
+                        </div>
+                        {% elif match.statut == 'accepte' %}
+                            {% if match.mentor == user %}
+                                <a href="{% url 'demarrer_conversation' match.mentore.id %}" class="btn btn-sm btn-primary mt-1">
+                                    <i class="fas fa-comment"></i> Discuter
+                                </a>
+                            {% else %}
+                                <a href="{% url 'demarrer_conversation' match.mentor.id %}" class="btn btn-sm btn-primary mt-1">
+                                    <i class="fas fa-comment"></i> Discuter
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-4 text-muted">
+                    <i class="fas fa-search fa-2x mb-2"></i>
+                    <p>Aucune suggestion pour l'instant.<br>
+                    <a href="{% url 'lancer_matching' %}">Lancer le matching</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0"><i class="fas fa-bullhorn text-primary me-2"></i>Mes publications</h6>
+                <a href="{% url 'creer_publication' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-plus me-1"></i>Nouvelle
+                </a>
+            </div>
+            {% if publications %}
+                {% for pub in publications %}
+                <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                    <div>
+                        <span class="badge {% if pub.type_publication == 'offre' %}bg-success{% else %}bg-warning text-dark{% endif %} me-2">
+                            {{ pub.get_type_publication_display }}
+                        </span>
+                        <strong>{{ pub.competence.nom }}</strong>
+                        <small class="d-block text-muted">{{ pub.get_format_seance_display }}</small>
+                    </div>
+                    <a href="{% url 'supprimer_publication' pub.id %}" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-4 text-muted">
+                    <i class="fas fa-pen fa-2x mb-2"></i>
+                    <p>Aucune publication.<br>
+                    <a href="{% url 'creer_publication' %}">Créer une offre ou demande</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

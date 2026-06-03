@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block titre %}Résultats du matching - MentorLink{% endblock %}
+
+{% block contenu %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4><i class="fas fa-magic text-primary me-2"></i>Résultats du matching</h4>
+    <a href="{% url 'tableau_de_bord' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Retour
+    </a>
+</div>
+
+{% if resultats %}
+<div class="row g-3">
+    {% for match in resultats %}
+    <div class="col-md-6">
+        <div class="card p-3">
+            <div class="d-flex align-items-center mb-3">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width:50px;height:50px;font-size:1.2rem;">
+                    {% if match.mentor == user %}
+                        {{ match.mentore.prenom.0 }}{{ match.mentore.nom.0 }}
+                    {% else %}
+                        {{ match.mentor.prenom.0 }}{{ match.mentor.nom.0 }}
+                    {% endif %}
+                </div>
+                <div>
+                    {% if match.mentor == user %}
+                        <strong>{{ match.mentore.prenom }} {{ match.mentore.nom }}</strong>
+                        <small class="d-block text-muted">Vous seriez son mentor</small>
+                    {% else %}
+                        <strong>{{ match.mentor.prenom }} {{ match.mentor.nom }}</strong>
+                        <small class="d-block text-muted">Serait votre mentor</small>
+                    {% endif %}
+                </div>
+                <div class="ms-auto text-center">
+                    <span class="badge bg-success fs-6">{{ match.score_global }}%</span>
+                    <small class="d-block text-muted">compatibilité</small>
+                </div>
+            </div>
+            <div class="row text-center mb-3">
+                <div class="col-4">
+                    <small class="text-muted">Compétences</small>
+                    <div class="fw-bold text-primary">{{ match.score_competences }}%</div>
+                </div>
+                <div class="col-4">
+                    <small class="text-muted">Horaires</small>
+                    <div class="fw-bold text-success">{{ match.score_horaires }}%</div>
+                </div>
+                <div class="col-4">
+                    <small class="text-muted">Filière</small>
+                    <div class="fw-bold text-warning">{{ match.score_filiere }}%</div>
+                </div>
+            </div>
+            {% if match.competences_communes %}
+            <div class="mb-3">
+                <strong>Compétences communes :</strong>
+                <span class="text-muted">{{ match.competences_communes|join:', ' }}</span>
+            </div>
+            {% endif %}
+            {% if match.disponibilites_communes %}
+            <div class="mb-3">
+                <strong>Disponibilités communes :</strong>
+                <span class="text-muted">{{ match.disponibilites_communes|join:', ' }}</span>
+            </div>
+            {% endif %}
+            {% if match.statut == 'en_attente' %}
+            <div class="d-flex gap-2">
+                <a href="{% url 'accepter_matching' match.id %}" class="btn btn-success btn-sm flex-fill">
+                    <i class="fas fa-check me-1"></i>Accepter
+                </a>
+                <a href="{% url 'refuser_matching' match.id %}" class="btn btn-outline-danger btn-sm flex-fill">
+                    <i class="fas fa-times me-1"></i>Refuser
+                </a>
+                {% if match.mentor == user %}
+                    <a href="{% url 'voir_profil' match.mentore.id %}" class="btn btn-outline-primary btn-sm flex-fill">
+                        <i class="fas fa-user me-1"></i>Profil
+                    </a>
+                {% else %}
+                    <a href="{% url 'voir_profil' match.mentor.id %}" class="btn btn-outline-primary btn-sm flex-fill">
+                        <i class="fas fa-user me-1"></i>Profil
+                    </a>
+                {% endif %}
+            </div>
+            {% elif match.statut == 'accepte' %}
+            <div class="alert alert-success py-2 mb-0">
+                <i class="fas fa-check-circle me-1"></i>Matching accepté !
+                {% if match.mentor == user %}
+                    <a href="{% url 'demarrer_conversation' match.mentore.id %}" class="btn btn-sm btn-primary ms-2">
+                        <i class="fas fa-comment me-1"></i>Discuter
+                    </a>
+                {% else %}
+                    <a href="{% url 'demarrer_conversation' match.mentor.id %}" class="btn btn-sm btn-primary ms-2">
+                        <i class="fas fa-comment me-1"></i>Discuter
+                    </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <i class="fas fa-search fa-4x text-muted mb-3"></i>
+    <h5 class="text-muted">Aucun résultat trouvé</h5>
+    <p class="text-muted">Complétez votre profil avec vos compétences et disponibilités pour obtenir des suggestions.</p>
+    <a href="{% url 'modifier_profil' %}" class="btn btn-primary">
+        <i class="fas fa-edit me-2"></i>Compléter mon profil
+    </a>
+</div>
+{% endif %}
+{% endblock %}
